@@ -91,12 +91,12 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   data() {
     return {
-      inputText: '',
-      checkList: [],
-      result: [],
-      optionsArr: [],
-      accessArr: ['public', 'protected', 'private'],
-      varArr: ['var', 'let', 'const'],
+      inputText: '' as string,
+      checkList: [] as string[],
+      result: [] as string[],
+      optionsArr: [] as string[],
+      accessArr: ['public', 'protected', 'private'] as string[],
+      varArr: ['var', 'let', 'const'] as string[],
       DataTypeArr: [
         'string',
         'int',
@@ -111,17 +111,17 @@ export default defineComponent({
         'symbol',
         'bigint',
         'void'
-      ],
-      othersArr: ['static', 'main'],
-      loopNum: 1,
-      accessRadio: 'public',
-      varRadio: 'var',
-      dataTypeRadio: 'string',
-      othersCheckList: [],
-      accessCheck: false,
-      varCheck: false,
-      dataTypeCheck: false,
-      otherCheck: false
+      ] as string[],
+      othersArr: ['static', 'main'] as string[],
+      loopNum: 1 as number,
+      accessRadio: 'public' as string,
+      varRadio: 'var' as string,
+      dataTypeRadio: 'string' as string,
+      othersCheckList: [] as string[],
+      accessCheck: false as boolean,
+      varCheck: false as boolean,
+      dataTypeCheck: false as boolean,
+      otherCheck: false as boolean
     }
   },
   methods: {
