@@ -1,85 +1,166 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <div>
+    <div id="selectOption">
+      <!-- アクセス修飾子の選択 -->
+      <div id="accessibility">
+        <label for=""
+          >アクセス修飾子
+          <input type="checkbox" v-model="accessCheck" />
+        </label>
+        <div>
+          <label v-for="access in accessArr" :key="access">
+            <input type="radio" :disabled="!accessCheck" :value="access" v-model="accessRadio" />{{
+              access
+            }}
+          </label>
+        </div>
+      </div>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+      <!-- 変数・定数定義の選択 -->
+      <div id="varDeclaration">
+        <label for=""
+          >変数宣言
+          <input type="checkbox" v-model="varCheck" />
+        </label>
+        <div>
+          <label v-for="varItem in varArr" :key="varItem">
+            <input type="radio" :disabled="!varCheck" :value="varItem" v-model="varRadio" />{{
+              varItem
+            }}
+          </label>
+        </div>
+      </div>
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+      <!-- データ型の選択 -->
+      <div id="data">
+        <label for=""
+          >データ型
+          <input type="checkbox" v-model="dataTypeCheck" />
+        </label>
+        <div>
+          <label v-for="dataType in DataTypeArr" :key="dataType">
+            <input
+              type="radio"
+              :disabled="!dataTypeCheck"
+              :value="dataType"
+              v-model="dataTypeRadio"
+            />{{ dataType }}
+          </label>
+        </div>
+      </div>
+
+      <!-- その他の選択 -->
+      <div id="other">
+        <label for=""
+          >その他
+          <input type="checkbox" v-model="otherCheck" />
+        </label>
+        <div>
+          <label v-for="other in othersArr" :key="other">
+            <input
+              type="checkbox"
+              :disabled="!otherCheck"
+              :value="other"
+              v-model="othersCheckList"
+            />{{ other }}
+          </label>
+        </div>
+      </div>
+
+      <!-- 変数入力 -->
+      <label
+        >変数名
+        <input type="text" v-model="inputText" />
+      </label>
+      <br />
+      <button @click="selectOptions">追加</button>
     </div>
-  </header>
 
-  <RouterView />
+    <div>
+      <ul class="button-list">
+        <li v-for="option in checkList" :key="option" class="btn btn-primary">{{ option }}</li>
+      </ul>
+    </div>
+    <button @click="deleteArr()">削除</button>
+  </div>
 </template>
 
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  data() {
+    return {
+      inputText: '',
+      checkList: [],
+      result: [],
+      optionsArr: [],
+      accessArr: ['public', 'protected', 'private'],
+      varArr: ['var', 'let', 'const'],
+      DataTypeArr: [
+        'string',
+        'int',
+        'boolean',
+        'number',
+        'byte',
+        'short',
+        'char',
+        'long',
+        'float',
+        'double',
+        'symbol',
+        'bigint',
+        'void'
+      ],
+      othersArr: ['static', 'main'],
+      loopNum: 1,
+      accessRadio: 'public',
+      varRadio: 'var',
+      dataTypeRadio: 'string',
+      othersCheckList: [],
+      accessCheck: false,
+      varCheck: false,
+      dataTypeCheck: false,
+      otherCheck: false
+    }
+  },
+  methods: {
+    selectOptions() {
+      if (this.accessCheck === true) {
+        this.checkList.push(this.accessRadio)
+      }
+      if (this.varCheck === true) {
+        this.checkList.push(this.varRadio)
+      }
+      if (this.dataTypeCheck === true) {
+        this.checkList.push(this.dataTypeRadio)
+      }
+      if (this.otherCheck === true) {
+        for (let other of this.othersArr) {
+          this.checkList.push(other)
+        }
+      }
+      this.checkList.push(this.inputText)
+      ;(this.accessCheck = false),
+        (this.varCheck = false),
+        (this.dataTypeCheck = false),
+        (this.otherCheck = false)
+    },
+    deleteArr() {
+      this.checkList.splice(0)
+    }
+  }
+  // computed: {
+  //   selectOptions() {
+  //     return ''
+  //   }
+  // }
+})
+</script>
+
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.button-list {
+  display: flex;
+  list-style: none;
 }
 </style>
