@@ -143,7 +143,7 @@ type varNameType = {
   varName: string
   editFlg: boolean
   insertFlg: boolean
-  disabledFlg: false
+  disabledFlg: boolean
 }
 
 export default defineComponent({
@@ -173,7 +173,7 @@ export default defineComponent({
       othersArr: ['static', 'main', 'readonly'] as string[],
       varNameList: [] as varNameType[],
       loopNum: 1 as number,
-      selectIndex: null as number,
+      selectIndex: 0 as number,
       accessRadio: 'public' as string,
       varRadio: 'var' as string,
       dataTypeRadio: 'string' as string,
@@ -213,7 +213,7 @@ export default defineComponent({
           (this.varCheck = false),
           (this.dataTypeCheck = false),
           (this.otherCheck = false)
-      } catch (error) {
+      } catch (error: any) {
         this.errorCheck = false
         console.log(error.message)
       }
@@ -262,12 +262,14 @@ export default defineComponent({
       this.selectIndex = index
     },
     dragEnd() {
-      this.selectIndex = null
+      this.selectIndex = 0
     },
     insertVar(varNameObj: varNameType, index: number) {
       const x = this.varNameList.map((x) => {
         if (varNameObj.id != x.id) {
-          return { ...x, disabledFlg: false }
+          x.disabledFlg = false
+          return { ...x }
+          // return { ...x, disabledFlg: false }
         } else {
           return { ...x }
         }
@@ -287,9 +289,14 @@ export default defineComponent({
     editing(id: number) {
       const x = this.varNameList.map((x) => {
         if (id == x.id) {
-          return { ...x, editFlg: true, insertFlg: false }
+          x.editFlg = true
+          x.insertFlg = false
+          return { ...x }
+          // return { ...x, editFlg: true, insertFlg: false }
         } else {
-          return { ...x, disabledFlg: true }
+          x.disabledFlg = true
+          return { ...x }
+          // return { ...x, disabledFlg: true }
         }
       })
       this.varNameList = x
