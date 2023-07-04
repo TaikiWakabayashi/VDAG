@@ -3,104 +3,173 @@
     <h1 class="title">VDAG</h1>
     <p class="subTitle">Variable Definition Automatic Generation</p>
     <div id="selectOption">
-      <!-- アクセス修飾子の選択 -->
-      <label class="label" for=""
-        >アクセス修飾子
-        <input type="checkbox" v-model="accessCheck" />
-      </label>
-      <div id="accessibility" class="subContainer">
-        <div>
-          <label v-for="access in accessArr" :key="access">
-            <input
-              type="radio"
-              :disabled="!accessCheck"
-              :value="access"
-              v-model="accessRadio"
-              class="sSpace"
-            />{{ access }}
-          </label>
+      <div class="wrapper">
+        <!-- アクセス修飾子の選択 -->
+        <label class="label" for=""
+          >アクセス修飾子
+          <input type="checkbox" v-model="accessCheck" />
+        </label>
+        <div id="accessibility" class="subContainer">
+          <div>
+            <label v-for="access in accessArr" :key="access">
+              <input
+                type="radio"
+                :disabled="!accessCheck"
+                :value="access"
+                v-model="accessRadio"
+                class="sSpace"
+              />{{ access }}
+            </label>
+          </div>
         </div>
       </div>
 
-      <!-- 変数・定数定義の選択 -->
-      <label class="label" for=""
-        >変数宣言
-        <input type="checkbox" v-model="varCheck" />
-      </label>
-      <div id="varDeclaration" class="subContainer">
-        <div>
-          <label v-for="varItem in varArr" :key="varItem">
-            <input type="radio" :disabled="!varCheck" :value="varItem" v-model="varRadio" />{{
-              varItem
-            }}
-          </label>
+      <div class="wrapper">
+        <!-- 変数・定数定義の選択 -->
+        <label class="label" for=""
+          >変数宣言
+          <input type="checkbox" v-model="varCheck" />
+        </label>
+        <div id="varDeclaration" class="subContainer">
+          <div>
+            <label v-for="varItem in varArr" :key="varItem">
+              <input type="radio" :disabled="!varCheck" :value="varItem" v-model="varRadio" />{{
+                varItem
+              }}
+            </label>
+          </div>
         </div>
       </div>
 
-      <!-- データ型の選択 -->
-      <label class="label" for=""
-        >型
-        <input type="checkbox" v-model="dataTypeCheck" />
-      </label>
-      <div id="data" class="subContainer">
-        <div>
-          <label v-for="dataType in DataTypeArr" :key="dataType">
-            <input
-              type="radio"
-              :disabled="!dataTypeCheck"
-              :value="dataType"
-              v-model="dataTypeRadio"
-            />{{ dataType }}
-          </label>
+      <div class="wrapper">
+        <!-- 型の選択 -->
+        <label class="label" for=""
+          >型1
+          <input type="checkbox" v-model="dataTypeCheck" />
+        </label>
+        <div id="data" class="subContainer">
+          <div>
+            <label v-for="dataType in DataTypeArr" :key="dataType">
+              <input
+                type="radio"
+                :disabled="!dataTypeCheck"
+                :value="dataType"
+                v-model="dataTypeRadio"
+              />{{ dataType }}
+            </label>
+          </div>
         </div>
       </div>
 
-      <!-- その他の選択 -->
-      <label class="label" for=""
-        >その他
-        <input type="checkbox" v-model="otherCheck" />
-      </label>
-      <div id="other" class="subContainer">
-        <div>
-          <label v-for="other in othersArr" :key="other">
-            <input
-              type="checkbox"
-              :disabled="!otherCheck"
-              :value="other"
-              v-model="othersChecks"
-            />{{ other }}
-          </label>
+      <div class="wrapper">
+        <!-- 型の選択2 -->
+        <label class="label" for=""
+          >型2
+          <input type="checkbox" v-model="dataTypeCheck" />
+        </label>
+        <div id="data" class="subContainer">
+          <div>
+            <label v-for="dataType in DataTypeArr2" :key="dataType">
+              <input
+                type="radio"
+                :disabled="!dataTypeCheck"
+                :value="dataType"
+                v-model="dataTypeRadio"
+              />{{ dataType }}
+            </label>
+          </div>
         </div>
       </div>
 
-      <!-- エラーゾーン -->
-      <div class="errorZone">
-        <p class="text-danger" :class="{ displayNone: selectCheck }">
-          その他を選択してください！！
-        </p>
-        <p class="text-danger" :class="{ displayNone: dupAccessCheck }">
-          同じアクセス修飾子が存在します！！
-        </p>
-        <p class="text-danger" :class="{ displayNone: dupVarCheck }">
-          同じ変数宣言が存在します！！
-        </p>
-        <p class="text-danger" :class="{ displayNone: dupDataTypeCheck }">同じ型が存在します！！</p>
-        <p class="text-danger" :class="{ displayNone: dupOtherCheck }">
-          同じその他設定が存在します！！
-        </p>
+      <div class="wrapper">
+        <!-- 型（カスタム） -->
+        <label class="label" for="">型（カスタム）） </label>
+        <div id="data" class="subContainer">
+          <div>
+            <input type="text" />
+          </div>
+        </div>
       </div>
 
-      <div class="text-center btnContainer">
-        <button class="btn btn-primary" @click="selectOptions">追加</button>
-        <button class="btn btn-primary" @click="deleteArr">全削除</button>
+      <div class="wrapper">
+        <!-- 配列の選択 -->
+        <label class="label" for=""
+          >配列
+          <input type="checkbox" v-model="dataTypeCheck" />
+        </label>
+        <div id="data" class="subContainer">
+          <div>
+            <label v-for="(arrFlg, index) in arrayFlgArr" :key="index">
+              <input
+                type="radio"
+                :disabled="!dataTypeCheck"
+                :value="arrFlg"
+                v-model="dataTypeRadio"
+              />{{ arrFlg }}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrapper">
+        <!-- $付け -->
+        <label class="label" for=""
+          >$付け
+          <input type="checkbox" v-model="otherCheck" />
+        </label>
+        <div id="other" class="subContainer">
+          <div>
+            <label v-for="(doll, index) in dollar" :key="index">
+              <input type="radio" :disabled="!otherCheck" :value="doll" v-model="othersChecks" />{{
+                doll
+              }}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrapper">
+        <!-- その他の選択 -->
+        <label class="label" for=""
+          >その他
+          <input type="checkbox" v-model="otherCheck" />
+        </label>
+        <div id="other" class="subContainer">
+          <div>
+            <label v-for="other in othersArr" :key="other">
+              <input
+                type="checkbox"
+                :disabled="!otherCheck"
+                :value="other"
+                v-model="othersChecks"
+              />{{ other }}
+            </label>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="listContainer">
-      <p>
-        - 追加リスト -<br />
-        <span class="text-info short">ドラッグ&ドロップで順番を変更できます</span>
+    <!-- エラーゾーン -->
+    <div class="errorZone">
+      <p class="text-danger" :class="{ displayNone: selectCheck }">その他を選択してください！！</p>
+      <p class="text-danger" :class="{ displayNone: dupAccessCheck }">
+        同じアクセス修飾子が存在します！！
       </p>
+      <p class="text-danger" :class="{ displayNone: dupVarCheck }">同じ変数宣言が存在します！！</p>
+      <p class="text-danger" :class="{ displayNone: dupDataTypeCheck }">同じ型が存在します！！</p>
+      <p class="text-danger" :class="{ displayNone: dupOtherCheck }">
+        同じその他設定が存在します！！
+      </p>
+    </div>
+
+    <div class="text-center btnContainer">
+      <button class="btn btn-primary" @click="selectOptions">追加</button>
+      <button class="btn btn-primary" @click="deleteArr">全削除</button>
+    </div>
+
+    <div class="listContainer">
+      <p class="label">追加リスト</p>
+      <span class="text-info short disc">ドラッグ&ドロップで順番を変更できます</span>
       <div class="listZone">
         <ul class="optionList">
           <li
@@ -120,16 +189,23 @@
     </div>
 
     <!-- 変数入力 -->
-    <div class="subContainer">
-      <label
-        >変数名
+    <div class="varContainer">
+      <label class="label">変数名</label>
+      <span class="text-info short disc"
+        >※命名規則を反映する場合は、スペース区切りで入力してください</span
+      >
+      <div class="subContainer">
         <input type="text" v-model="inputText" />
-      </label>
-      <button class="btn btn-primary" @click="addVarName" :disabled="!isAddVarNameOn">追加</button>
-      <p class="text-info short">※命名規則を反映する場合は、スペース区切りで入力してください</p>
+        <button class="btn btn-primary" @click="addVarName" :disabled="!isAddVarNameOn">
+          追加
+        </button>
+      </div>
+    </div>
 
-      <p>- 追加変数リスト -</p>
-      <ul>
+    <div class="varNameListContainer">
+      <!-- 追加リスト -->
+      <p class="label">追加変数リスト</p>
+      <ul class="subContainer">
         <li v-for="(varNameObj, index) in varNameList" :key="varNameObj.id">
           <input
             type="text"
@@ -157,7 +233,6 @@
       </ul>
     </div>
 
-    <!-- 追加リスト -->
     <div>
       <!-- モード -->
       <div>
@@ -168,10 +243,19 @@
           >
         </div>
       </div>
-      <button class="btn btn-primary" @click="generate" :disabled="!isGenerateOn">生成</button>
-      <button class="btn btn-primary" @click="clear">クリア</button>
+      <div class="text-center btnContainer">
+        <button class="btn btn-primary" @click="generate" :disabled="!isGenerateOn">生成</button>
+        <button class="btn btn-primary" @click="clear">クリア</button>
+      </div>
     </div>
-    <p v-for="item in result" :key="item">{{ item }}</p>
+
+    <!-- 完成 -->
+    <div class="resultContainer">
+      <p class="label">完成品</p>
+      <div class="subContainer">
+        <p v-for="item in result" :key="item">{{ item }}</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -210,7 +294,21 @@ export default defineComponent({
         'bigint',
         'void'
       ] as string[],
+      DataTypeArr2: [
+        'String',
+        'Number',
+        'Boolean',
+        'Map',
+        'Array',
+        'Function',
+        'Math',
+        'Date',
+        'Integer'
+      ] as string[],
+      customDataType: '' as string,
       othersArr: ['static', 'main', 'readonly'] as string[],
+      arrayFlgArr: ['あり', 'なし'] as string[],
+      dollar: ['あり', 'なし'] as string[],
       namingConvention: [
         'なし',
         'キャメルケース',
@@ -236,7 +334,8 @@ export default defineComponent({
       dupVarCheck: true as boolean,
       dupDataTypeCheck: true as boolean,
       dupOtherCheck: true as boolean,
-      isGenerateOn: false as boolean
+      isGenerateOn: false as boolean,
+      arrayFlg: false as boolean
     }
   },
   methods: {
@@ -464,14 +563,68 @@ button {
   margin: 0 10px;
 }
 #selectOption {
-  margin: 50px 0;
+  margin: 50px 0 30px 0;
+  display: grid;
+  grid-template-columns: 1fr 25px 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+}
+.wrapper {
+  width: 100%;
+}
+.wrapper:nth-of-type(1) {
+  grid-row: 1/2;
+  grid-column: 1/2;
+}
+.wrapper:nth-of-type(2) {
+  grid-row: 1/2;
+  grid-column: 3/4;
+}
+.wrapper:nth-of-type(3) {
+  grid-row: 2/3;
+  grid-column: 1/2;
+}
+.wrapper:nth-of-type(4) {
+  grid-row: 2/3;
+  grid-column: 3/4;
+}
+.wrapper:nth-of-type(5) {
+  grid-row: 3/4;
+  grid-column: 1/2;
+}
+.wrapper:nth-of-type(6) {
+  grid-row: 3/4;
+  grid-column: 3/4;
+}
+.wrapper:nth-of-type(7) {
+  grid-row: 4/5;
+  grid-column: 1/2;
+}
+.wrapper:nth-of-type(8) {
+  grid-row: 4/5;
+  grid-column: 3/4;
 }
 .subContainer {
   width: 100%;
   border: 1px solid #007bff;
   border-radius: 10px;
   margin-bottom: 45px;
-  padding: 25px;
+  padding: 20px;
+}
+.listContainer {
+  width: 100%;
+  position: relative;
+}
+.varContainer {
+  width: 100%;
+  position: relative;
+}
+.varNameListContainer {
+  widows: 100%;
+}
+.disc {
+  position: absolute;
+  top: 12%;
+  left: 180px;
 }
 .title,
 .subTitle {
