@@ -1,27 +1,33 @@
 <template>
-  <div>
+  <div class="container">
+    <h1 class="title">VDAG</h1>
+    <p class="subTitle">Variable Definition Automatic Generation</p>
     <div id="selectOption">
       <!-- アクセス修飾子の選択 -->
-      <div id="accessibility">
-        <label for=""
-          >アクセス修飾子
-          <input type="checkbox" v-model="accessCheck" />
-        </label>
+      <label class="label" for=""
+        >アクセス修飾子
+        <input type="checkbox" v-model="accessCheck" />
+      </label>
+      <div id="accessibility" class="subContainer">
         <div>
           <label v-for="access in accessArr" :key="access">
-            <input type="radio" :disabled="!accessCheck" :value="access" v-model="accessRadio" />{{
-              access
-            }}
+            <input
+              type="radio"
+              :disabled="!accessCheck"
+              :value="access"
+              v-model="accessRadio"
+              class="sSpace"
+            />{{ access }}
           </label>
         </div>
       </div>
 
       <!-- 変数・定数定義の選択 -->
-      <div id="varDeclaration">
-        <label for=""
-          >変数宣言
-          <input type="checkbox" v-model="varCheck" />
-        </label>
+      <label class="label" for=""
+        >変数宣言
+        <input type="checkbox" v-model="varCheck" />
+      </label>
+      <div id="varDeclaration" class="subContainer">
         <div>
           <label v-for="varItem in varArr" :key="varItem">
             <input type="radio" :disabled="!varCheck" :value="varItem" v-model="varRadio" />{{
@@ -32,11 +38,11 @@
       </div>
 
       <!-- データ型の選択 -->
-      <div id="data">
-        <label for=""
-          >データ型
-          <input type="checkbox" v-model="dataTypeCheck" />
-        </label>
+      <label class="label" for=""
+        >型
+        <input type="checkbox" v-model="dataTypeCheck" />
+      </label>
+      <div id="data" class="subContainer">
         <div>
           <label v-for="dataType in DataTypeArr" :key="dataType">
             <input
@@ -50,11 +56,11 @@
       </div>
 
       <!-- その他の選択 -->
-      <div id="other">
-        <label for=""
-          >その他
-          <input type="checkbox" v-model="otherCheck" />
-        </label>
+      <label class="label" for=""
+        >その他
+        <input type="checkbox" v-model="otherCheck" />
+      </label>
+      <div id="other" class="subContainer">
         <div>
           <label v-for="other in othersArr" :key="other">
             <input
@@ -66,41 +72,63 @@
           </label>
         </div>
       </div>
-      <p class="text-danger" :class="{ displayNone: errorCheck }">選択してください！！</p>
-      <br />
-      <button class="btn btn-primary" @click="selectOptions">追加</button>
-      <button class="btn btn-primary" @click="deleteArr">削除</button>
+
+      <!-- エラーゾーン -->
+      <div class="errorZone">
+        <p class="text-danger" :class="{ displayNone: selectCheck }">
+          その他を選択してください！！
+        </p>
+        <p class="text-danger" :class="{ displayNone: dupAccessCheck }">
+          同じアクセス修飾子が存在します！！
+        </p>
+        <p class="text-danger" :class="{ displayNone: dupVarCheck }">
+          同じ変数宣言が存在します！！
+        </p>
+        <p class="text-danger" :class="{ displayNone: dupDataTypeCheck }">同じ型が存在します！！</p>
+        <p class="text-danger" :class="{ displayNone: dupOtherCheck }">
+          同じその他設定が存在します！！
+        </p>
+      </div>
+
+      <div class="text-center btnContainer">
+        <button class="btn btn-primary" @click="selectOptions">追加</button>
+        <button class="btn btn-primary" @click="deleteArr">全削除</button>
+      </div>
     </div>
 
-    <div>
-      <ul class="button-list">
-        <li
-          v-for="(option, index) in checkList"
-          :key="option"
-          class="btn btn-primary"
-          :draggable="true"
-          @dragstart="dragStart(index)"
-          @dragenter="dragEnter(index)"
-          @dragover.prevent
-          @dragend="dragEnd"
-        >
-          {{ option }}
-        </li>
-      </ul>
+    <div class="listContainer">
+      <p>
+        - 追加リスト -<br />
+        <span class="text-info short">ドラッグ&ドロップで順番を変更できます</span>
+      </p>
+      <div class="listZone">
+        <ul class="optionList">
+          <li
+            v-for="(option, index) in checkList"
+            :key="option"
+            class="btn btn-primary optionItem"
+            :draggable="true"
+            @dragstart="dragStart(index)"
+            @dragenter="dragEnter(index)"
+            @dragover.prevent
+            @dragend="dragEnd"
+          >
+            {{ option }}
+          </li>
+        </ul>
+      </div>
     </div>
 
     <!-- 変数入力 -->
-    <div>
+    <div class="subContainer">
       <label
         >変数名
         <input type="text" v-model="inputText" />
       </label>
       <button class="btn btn-primary" @click="addVarName" :disabled="!isAddVarNameOn">追加</button>
-    </div>
+      <p class="text-info short">※命名規則を反映する場合は、スペース区切りで入力してください</p>
 
-    <!-- 追加リスト -->
-    <div>
-      <p>追加リスト</p>
+      <p>- 追加変数リスト -</p>
       <ul>
         <li v-for="(varNameObj, index) in varNameList" :key="varNameObj.id">
           <input
@@ -127,11 +155,23 @@
           <button class="btn btn-primary" @click="deleteVar(index)">削除</button>
         </li>
       </ul>
+    </div>
+
+    <!-- 追加リスト -->
+    <div>
+      <!-- モード -->
+      <div>
+        <p class="label">命名規則</p>
+        <div class="subContainer">
+          <label v-for="mode in namingConvention" :key="mode">
+            <input type="radio" v-model="namingConversationCheck" :value="mode" /> {{ mode }}</label
+          >
+        </div>
+      </div>
       <button class="btn btn-primary" @click="generate" :disabled="!isGenerateOn">生成</button>
-      <!-- <button class="btn btn-primary" @click="editVar" :disabled="!isGenerateOn">編集</button> -->
+      <button class="btn btn-primary" @click="clear">クリア</button>
     </div>
     <p v-for="item in result" :key="item">{{ item }}</p>
-    <button class="btn btn-primary" @click="clear">クリア</button>
   </div>
 </template>
 
@@ -171,6 +211,14 @@ export default defineComponent({
         'void'
       ] as string[],
       othersArr: ['static', 'main', 'readonly'] as string[],
+      namingConvention: [
+        'なし',
+        'キャメルケース',
+        'ケバブケース',
+        'パスカルケース',
+        'スネークケース'
+      ] as string[],
+      namingConversationCheck: 'なし' as string,
       varNameList: [] as varNameType[],
       loopNum: 1 as number,
       selectIndex: 0 as number,
@@ -183,7 +231,11 @@ export default defineComponent({
       varCheck: false as boolean,
       dataTypeCheck: false as boolean,
       otherCheck: false as boolean,
-      errorCheck: true as boolean,
+      selectCheck: true as boolean,
+      dupAccessCheck: true as boolean,
+      dupVarCheck: true as boolean,
+      dupDataTypeCheck: true as boolean,
+      dupOtherCheck: true as boolean,
       isGenerateOn: false as boolean
     }
   },
@@ -192,38 +244,74 @@ export default defineComponent({
       try {
         if (this.otherCheck === true) {
           if (this.othersChecks.length == 0) {
+            this.selectCheck = false
             throw new Error('その他を選択してください')
           } else {
             for (let other of this.othersChecks) {
-              this.checkList.push(other)
+              if (this.checkList.indexOf(other) != -1) {
+                this.dupOtherCheck = false
+                this.otherCheck = false
+                throw new Error('同じその他設定が既に存在します')
+              } else {
+                this.checkList.push(other)
+                this.selectCheck = true
+              }
             }
-            this.errorCheck = true
           }
         }
         if (this.accessCheck === true) {
-          this.checkList.push(this.accessRadio)
+          if (this.checkList.indexOf(this.accessRadio) != -1) {
+            this.dupAccessCheck = false
+            this.accessCheck = false
+            throw new Error('同じアクセス修飾子が既に存在します')
+          } else {
+            this.checkList.push(this.accessRadio)
+            this.dupAccessCheck = true
+          }
         }
         if (this.varCheck === true) {
-          this.checkList.push(this.varRadio)
+          if (this.checkList.indexOf(this.varRadio) != -1) {
+            this.dupVarCheck = false
+            this.varCheck = false
+            throw new Error('同じ変数宣言が存在します')
+          } else {
+            this.checkList.push(this.varRadio)
+            this.dupVarCheck = true
+          }
         }
         if (this.dataTypeCheck === true) {
-          this.checkList.push(this.dataTypeRadio)
+          if (this.checkList.indexOf(this.dataTypeRadio) != -1) {
+            this.dupDataTypeCheck = false
+            this.dataTypeCheck = false
+            throw new Error('同じ型が存在します')
+          } else {
+            this.checkList.push(this.dataTypeRadio)
+            this.dupDataTypeCheck = true
+          }
         }
         ;(this.accessCheck = false),
           (this.varCheck = false),
           (this.dataTypeCheck = false),
-          (this.otherCheck = false)
+          (this.otherCheck = false),
+          (this.dupAccessCheck = true),
+          (this.dupVarCheck = true),
+          (this.dupDataTypeCheck = true),
+          (this.dupOtherCheck = true)
       } catch (error: any) {
-        this.errorCheck = false
         console.log(error.message)
       }
     },
     deleteArr() {
+      ;(this.otherCheck = false),
+        (this.selectCheck = true),
+        (this.dupAccessCheck = true),
+        (this.dupVarCheck = true),
+        (this.dupDataTypeCheck = true),
+        (this.dupOtherCheck = true)
       this.checkList.splice(0)
       this.othersChecks.splice(0)
     },
     addVarName() {
-      console.log(this.varNameList)
       const newVarNameObj: varNameType = {
         id: this.varNameList.length,
         varName: this.inputText,
@@ -232,18 +320,43 @@ export default defineComponent({
         disabledFlg: false
       }
       this.varNameList.push(newVarNameObj)
-      console.log(this.varNameList)
       this.inputText = ''
       this.isGenerateOn = true
     },
     generate() {
-      let defaultVar = ''
+      let defaultVar: string = ''
       const varNameList: varNameType[] = this.varNameList
       for (let check of this.checkList) {
         defaultVar += check + ' '
       }
       for (let varNameObj of varNameList) {
-        this.result.push(defaultVar + varNameObj.varName)
+        if (this.namingConversationCheck == 'なし') {
+          this.result.push(defaultVar + varNameObj.varName)
+        } else if (this.namingConversationCheck == 'キャメルケース') {
+          const name: string = varNameObj.varName
+          const replaceName: string = name.replace(/\s./g, (searchStr) => {
+            return searchStr.charAt(1).toUpperCase()
+          })
+          this.result.push(defaultVar + replaceName)
+        } else if (this.namingConversationCheck == 'ケバブケース') {
+          const name: string = varNameObj.varName
+          const replaceName: string = name.replace(/\s/g, '-')
+          this.result.push(defaultVar + replaceName)
+        } else if (this.namingConversationCheck == 'パスカルケース') {
+          const name: string = varNameObj.varName
+          const initial: string = varNameObj.varName.charAt(0).toUpperCase()
+          // キャメルケースを一度生成
+          const replaceName: string = name.replace(/\s./g, (searchStr) => {
+            return searchStr.charAt(1).toUpperCase()
+          })
+          // パスカルケースを生成
+          const pascal: string = replaceName.replace(replaceName.charAt(0), initial)
+          this.result.push(defaultVar + pascal)
+        } else if (this.namingConversationCheck == 'スネークケース') {
+          const name: string = varNameObj.varName
+          const replaceName: string = name.replace(/\s/g, '_')
+          this.result.push(defaultVar + replaceName)
+        }
       }
     },
     clear() {
@@ -269,13 +382,18 @@ export default defineComponent({
         if (varNameObj.id != x.id) {
           x.disabledFlg = false
           return { ...x }
-          // return { ...x, disabledFlg: false }
         } else {
           return { ...x }
         }
       })
       this.varNameList = x
-      const newVarName: string = this.editingVarName
+
+      let newVarName: string = ''
+      if (this.editingVarName == '') {
+        newVarName = varNameObj.varName
+      } else {
+        newVarName = this.editingVarName
+      }
       const editVarNameObj: varNameType = {
         ...varNameObj,
         varName: newVarName,
@@ -292,15 +410,12 @@ export default defineComponent({
           x.editFlg = true
           x.insertFlg = false
           return { ...x }
-          // return { ...x, editFlg: true, insertFlg: false }
         } else {
           x.disabledFlg = true
           return { ...x }
-          // return { ...x, disabledFlg: true }
         }
       })
       this.varNameList = x
-      console.log(this.varNameList)
     },
     deleteVar(index: number) {
       this.varNameList.splice(index, 1)
@@ -329,11 +444,89 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.button-list {
-  display: flex;
-  list-style: none;
+html,
+body {
+  height: 100%;
+  font-size: 62.5%;
+  padding: 0;
+  margin: 0;
+  font-family: 'Sawarabi Gothic', sans-serif;
 }
-
+label {
+  padding-right: 10px;
+  margin: 0;
+}
+input {
+  margin: 0 5px;
+  vertical-align: middle;
+}
+button {
+  margin: 0 10px;
+}
+#selectOption {
+  margin: 50px 0;
+}
+.subContainer {
+  width: 100%;
+  border: 1px solid #007bff;
+  border-radius: 10px;
+  margin-bottom: 45px;
+  padding: 25px;
+}
+.title,
+.subTitle {
+  text-align: center;
+}
+.title {
+  font-size: 6rem;
+}
+.subTitle {
+  letter-spacing: 3px;
+  font-size: 1rem;
+}
+.errorZone {
+  width: 100%;
+  /* padding: 20px; */
+}
+.errorZone p {
+  margin: 0;
+}
+.btnContainer {
+  margin: 20px 0;
+}
+.optionList {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.optionItem {
+  margin: 0 10px;
+}
+.listZone {
+  width: 100%;
+  margin-bottom: 50px;
+  padding: 30px 0;
+  border: 1px solid #007bff;
+  border-radius: 10px;
+}
+.label {
+  font-size: 13px;
+  width: 150px;
+  height: 50px;
+  line-height: 50px;
+  margin: 0;
+  margin-left: 15px;
+  text-align: center;
+  background-color: #007bff;
+  color: white;
+  border-radius: 8px 8px 0 0;
+}
+.short {
+  font-size: 0.8rem;
+}
 .displayNone {
   display: none;
 }
