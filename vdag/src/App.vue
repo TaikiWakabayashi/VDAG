@@ -65,16 +65,16 @@
         <!-- 型の選択2 -->
         <label class="label" for=""
           >型2
-          <input type="checkbox" v-model="dataTypeCheck" />
+          <input type="checkbox" v-model="dataTypeCheck2" />
         </label>
         <div id="data" class="subContainer">
           <div>
             <label v-for="dataType in DataTypeArr2" :key="dataType">
               <input
                 type="radio"
-                :disabled="!dataTypeCheck"
+                :disabled="!dataTypeCheck2"
                 :value="dataType"
-                v-model="dataTypeRadio"
+                v-model="dataTypeRadio2"
               />{{ dataType }}
             </label>
           </div>
@@ -83,10 +83,13 @@
 
       <div class="wrapper">
         <!-- 型（カスタム） -->
-        <label class="label" for="">型（カスタム）） </label>
+        <label class="label" for=""
+          >型（カスタム）
+          <input type="checkbox" v-model="dataTypeCheckCustom" />
+        </label>
         <div id="data" class="subContainer">
           <div>
-            <input type="text" />
+            <input type="text" v-model="customDataType" :disabled="!dataTypeCheckCustom" />
           </div>
         </div>
       </div>
@@ -95,17 +98,14 @@
         <!-- 配列の選択 -->
         <label class="label" for=""
           >配列
-          <input type="checkbox" v-model="dataTypeCheck" />
+          <input type="checkbox" v-model="arrayFlg" />
         </label>
         <div id="data" class="subContainer">
           <div>
             <label v-for="(arrFlg, index) in arrayFlgArr" :key="index">
-              <input
-                type="radio"
-                :disabled="!dataTypeCheck"
-                :value="arrFlg"
-                v-model="dataTypeRadio"
-              />{{ arrFlg }}
+              <input type="radio" :disabled="!arrayFlg" :value="arrFlg" v-model="arrRadio" />{{
+                arrFlg
+              }}
             </label>
           </div>
         </div>
@@ -115,12 +115,12 @@
         <!-- $付け -->
         <label class="label" for=""
           >$付け
-          <input type="checkbox" v-model="otherCheck" />
+          <input type="checkbox" v-model="dollCheck" />
         </label>
         <div id="other" class="subContainer">
           <div>
             <label v-for="(doll, index) in dollar" :key="index">
-              <input type="radio" :disabled="!otherCheck" :value="doll" v-model="othersChecks" />{{
+              <input type="radio" :disabled="!dollCheck" :value="doll" v-model="dollRadio" />{{
                 doll
               }}
             </label>
@@ -156,10 +156,15 @@
         同じアクセス修飾子が存在します！！
       </p>
       <p class="text-danger" :class="{ displayNone: dupVarCheck }">同じ変数宣言が存在します！！</p>
-      <p class="text-danger" :class="{ displayNone: dupDataTypeCheck }">同じ型が存在します！！</p>
+      <p class="text-danger" :class="{ displayNone: dupDataTypeCheck }">同じ型1が存在します！！</p>
+      <p class="text-danger" :class="{ displayNone: dupDataTypeCheck2 }">同じ型2が存在します！！</p>
+      <p class="text-danger" :class="{ displayNone: dupDataTypeCheckCustom }">
+        同じ型(カスタム)が存在します！！
+      </p>
       <p class="text-danger" :class="{ displayNone: dupOtherCheck }">
         同じその他設定が存在します！！
       </p>
+      <p class="text-danger" :class="{ displayNone: dupDollCheck }">＄は既に設定しています</p>
     </div>
 
     <div class="text-center btnContainer">
@@ -168,14 +173,14 @@
     </div>
 
     <div class="listContainer">
-      <p class="label">追加リスト</p>
-      <span class="text-info short disc">ドラッグ&ドロップで順番を変更できます</span>
+      <p class="label2">追加リスト</p>
+      <span class="text-primary short disc">ドラッグ&ドロップで順番を変更できます</span>
       <div class="listZone">
         <ul class="optionList">
           <li
             v-for="(option, index) in checkList"
             :key="option"
-            class="btn btn-primary optionItem"
+            class="btn btn-success optionItem"
             :draggable="true"
             @dragstart="dragStart(index)"
             @dragenter="dragEnter(index)"
@@ -191,7 +196,7 @@
     <!-- 変数入力 -->
     <div class="varContainer">
       <label class="label">変数名</label>
-      <span class="text-info short disc"
+      <span class="text-primary short disc"
         >※命名規則を反映する場合は、スペース区切りで入力してください</span
       >
       <div class="subContainer">
@@ -204,8 +209,8 @@
 
     <div class="varNameListContainer">
       <!-- 追加リスト -->
-      <p class="label">追加変数リスト</p>
-      <ul class="subContainer">
+      <p class="label2">追加変数リスト</p>
+      <ul class="subContainer2">
         <li v-for="(varNameObj, index) in varNameList" :key="varNameObj.id">
           <input
             type="text"
@@ -214,21 +219,21 @@
             @change="editVarName"
           />
           <button
-            class="btn btn-primary"
+            class="btn btn-success"
             :class="{ displayNone: varNameObj.insertFlg }"
             @click="insertVar(varNameObj, index)"
           >
             完了
           </button>
           <button
-            class="btn btn-primary"
+            class="btn btn-success"
             :disabled="varNameObj.disabledFlg"
             :class="{ displayNone: varNameObj.editFlg }"
             @click="editing(varNameObj.id)"
           >
             編集
           </button>
-          <button class="btn btn-primary" @click="deleteVar(index)">削除</button>
+          <button class="btn btn-success" @click="deleteVar(index)">削除</button>
         </li>
       </ul>
     </div>
@@ -251,8 +256,8 @@
 
     <!-- 完成 -->
     <div class="resultContainer">
-      <p class="label">完成品</p>
-      <div class="subContainer">
+      <p class="label2">完成品</p>
+      <div class="subContainer2">
         <p v-for="item in result" :key="item">{{ item }}</p>
       </div>
     </div>
@@ -307,8 +312,8 @@ export default defineComponent({
       ] as string[],
       customDataType: '' as string,
       othersArr: ['static', 'main', 'readonly'] as string[],
-      arrayFlgArr: ['あり', 'なし'] as string[],
-      dollar: ['あり', 'なし'] as string[],
+      arrayFlgArr: ['あり'] as string[],
+      dollar: ['あり'] as string[],
       namingConvention: [
         'なし',
         'キャメルケース',
@@ -323,23 +328,33 @@ export default defineComponent({
       accessRadio: 'public' as string,
       varRadio: 'var' as string,
       dataTypeRadio: 'string' as string,
+      dataTypeRadio2: 'String' as string,
+      arrRadio: 'あり' as string,
+      dollRadio: 'あり' as string,
       othersChecks: [] as string[],
       editingVarName: '' as string,
       accessCheck: false as boolean,
       varCheck: false as boolean,
       dataTypeCheck: false as boolean,
+      dataTypeCheck2: false as boolean,
+      dataTypeCheckCustom: false as boolean,
       otherCheck: false as boolean,
       selectCheck: true as boolean,
       dupAccessCheck: true as boolean,
       dupVarCheck: true as boolean,
       dupDataTypeCheck: true as boolean,
+      dupDataTypeCheck2: true as boolean,
+      dupDataTypeCheckCustom: true as boolean,
       dupOtherCheck: true as boolean,
       isGenerateOn: false as boolean,
-      arrayFlg: false as boolean
+      arrayFlg: false as boolean,
+      dollCheck: false as boolean,
+      dupDollCheck: true as boolean
     }
   },
   methods: {
     selectOptions() {
+      // その他設定
       try {
         if (this.otherCheck === true) {
           if (this.othersChecks.length == 0) {
@@ -358,6 +373,7 @@ export default defineComponent({
             }
           }
         }
+        // アクセス修飾子
         if (this.accessCheck === true) {
           if (this.checkList.indexOf(this.accessRadio) != -1) {
             this.dupAccessCheck = false
@@ -368,6 +384,7 @@ export default defineComponent({
             this.dupAccessCheck = true
           }
         }
+        // 変数宣言
         if (this.varCheck === true) {
           if (this.checkList.indexOf(this.varRadio) != -1) {
             this.dupVarCheck = false
@@ -378,24 +395,81 @@ export default defineComponent({
             this.dupVarCheck = true
           }
         }
+        // 型１
         if (this.dataTypeCheck === true) {
+          if (this.arrayFlg == true && this.arrRadio == 'あり') {
+            const arrType = this.dataTypeRadio + '[]'
+            this.dataTypeRadio = arrType
+          }
           if (this.checkList.indexOf(this.dataTypeRadio) != -1) {
             this.dupDataTypeCheck = false
             this.dataTypeCheck = false
-            throw new Error('同じ型が存在します')
+            this.arrayFlg = false
+            this.dataTypeRadio = 'string'
+            throw new Error('同じ型1が存在します')
           } else {
             this.checkList.push(this.dataTypeRadio)
             this.dupDataTypeCheck = true
+            this.arrayFlg = false
+            this.dataTypeRadio = 'string'
+          }
+        }
+        // 型２
+        if (this.dataTypeCheck2 === true) {
+          if (this.arrayFlg == true && this.arrRadio == 'あり') {
+            const arrType = this.dataTypeRadio + '[]'
+            this.dataTypeRadio = arrType
+          }
+          if (this.checkList.indexOf(this.dataTypeRadio2) != -1) {
+            this.dupDataTypeCheck2 = false
+            this.dataTypeCheck2 = false
+            this.arrayFlg = false
+            this.dataTypeRadio = 'String'
+            throw new Error('同じ型2が存在します')
+          } else {
+            this.checkList.push(this.dataTypeRadio2)
+            this.dupDataTypeCheck2 = true
+            this.arrayFlg = false
+            this.dataTypeRadio = 'String'
+          }
+        }
+        // 型３
+        if (this.dataTypeCheckCustom === true) {
+          if (this.checkList.indexOf(this.customDataType) != -1) {
+            this.dupDataTypeCheckCustom = false
+            this.dataTypeCheckCustom = false
+            this.customDataType = ''
+            throw new Error('同じ型(カスタム)が存在します')
+          } else {
+            this.checkList.push(this.customDataType)
+            this.dupDataTypeCheckCustom = true
+            this.customDataType = ''
+          }
+        }
+        // $付け
+        if (this.dollCheck === true) {
+          if (this.checkList.indexOf('$') != -1) {
+            this.dollCheck = false
+            this.dupDollCheck = false
+            throw new Error('既に設定済みです')
+          } else {
+            this.checkList.push('$')
+            this.dollCheck = true
           }
         }
         ;(this.accessCheck = false),
           (this.varCheck = false),
           (this.dataTypeCheck = false),
+          (this.dataTypeCheck2 = false),
+          (this.dataTypeCheckCustom = false),
           (this.otherCheck = false),
           (this.dupAccessCheck = true),
           (this.dupVarCheck = true),
           (this.dupDataTypeCheck = true),
-          (this.dupOtherCheck = true)
+          (this.dupDataTypeCheck2 = true),
+          (this.dupDataTypeCheckCustom = true),
+          (this.dupOtherCheck = true),
+          (this.dollCheck = false)
       } catch (error: any) {
         console.log(error.message)
       }
@@ -406,7 +480,10 @@ export default defineComponent({
         (this.dupAccessCheck = true),
         (this.dupVarCheck = true),
         (this.dupDataTypeCheck = true),
-        (this.dupOtherCheck = true)
+        (this.dupDataTypeCheck2 = true),
+        (this.dupDataTypeCheckCustom = true),
+        (this.dupOtherCheck = true),
+        (this.dupDollCheck = true)
       this.checkList.splice(0)
       this.othersChecks.splice(0)
     },
@@ -426,7 +503,11 @@ export default defineComponent({
       let defaultVar: string = ''
       const varNameList: varNameType[] = this.varNameList
       for (let check of this.checkList) {
-        defaultVar += check + ' '
+        if (check == '$') {
+          defaultVar += check
+        } else {
+          defaultVar += check + ' '
+        }
       }
       for (let varNameObj of varNameList) {
         if (this.namingConversationCheck == 'なし') {
@@ -610,6 +691,13 @@ button {
   margin-bottom: 45px;
   padding: 20px;
 }
+.subContainer2 {
+  width: 100%;
+  border: 1px solid #28a745;
+  border-radius: 10px;
+  margin-bottom: 45px;
+  padding: 20px;
+}
 .listContainer {
   width: 100%;
   position: relative;
@@ -662,7 +750,7 @@ button {
   width: 100%;
   margin-bottom: 50px;
   padding: 30px 0;
-  border: 1px solid #007bff;
+  border: 1px solid #28a745;
   border-radius: 10px;
 }
 .label {
@@ -677,10 +765,25 @@ button {
   color: white;
   border-radius: 8px 8px 0 0;
 }
+.label2 {
+  font-size: 13px;
+  width: 150px;
+  height: 50px;
+  line-height: 50px;
+  margin: 0;
+  margin-left: 15px;
+  text-align: center;
+  color: white;
+  border-radius: 8px 8px 0 0;
+  background-color: #28a745;
+}
 .short {
   font-size: 0.8rem;
 }
 .displayNone {
   display: none;
+}
+.lineThrough {
+  text-decoration: line-through;
 }
 </style>
